@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Portfolio Spacing Test</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: Arial, sans-serif; 
+            background: #222; 
+            color: white; 
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #333;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .device-info {
+            background: #444;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        .spacing-visual {
+            border: 2px solid #ff6b6b;
+            background: #555;
+            padding: 32px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .spacing-visual.mobile {
+            padding: 32px;
+            background: #4ecdc4;
+            color: #000;
+        }
+        .spacing-visual.small {
+            padding: 24px;
+            background: #45b7d1;
+            color: #000;
+        }
+        .spacing-visual.tiny {
+            padding: 16px;
+            background: #f9ca24;
+            color: #000;
+        }
+        @media (max-width: 768px) {
+            .desktop-only { display: none; }
+        }
+        @media (max-width: 480px) {
+            .tablet-only { display: none; }
+        }
+        @media (max-width: 360px) {
+            .small-only { display: none; }
+        }
+        .button {
+            display: inline-block;
+            background: #6c5ce7;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>📱 Portfolio Spacing Test</h1>
+        
+        <div class="device-info">
+            <strong>Screen Width:</strong> <span id="screenWidth"></span>px<br>
+            <strong>Viewport Width:</strong> <span id="viewportWidth"></span>px<br>
+            <strong>Device Pixel Ratio:</strong> <span id="deviceRatio"></span><br>
+            <strong>Current Breakpoint:</strong> <span id="breakpoint"></span>
+        </div>
+
+        <h2>🎯 Expected Spacing:</h2>
+        
+        <div class="spacing-visual desktop-only">
+            <strong>Desktop (>768px):</strong> No padding - content goes to edges
+        </div>
+
+        <div class="spacing-visual mobile tablet-only">
+            <strong>Mobile/Tablet (≤768px):</strong> 32px padding around canvas
+        </div>
+
+        <div class="spacing-visual small small-only">
+            <strong>Small Mobile (≤480px):</strong> 24px padding
+        </div>
+
+        <div class="spacing-visual tiny">
+            <strong>Very Small (≤360px):</strong> 16px padding
+        </div>
+
+        <h2>✅ What to Check:</h2>
+        <ul>
+            <li>✓ Text never touches screen edges</li>
+            <li>✓ Animation controls have proper spacing</li>
+            <li>✓ Social links don't get cut off</li>
+            <li>✓ Canvas has breathing room on mobile</li>
+            <li>✓ Bottom section content is properly spaced</li>
+        </ul>
+
+        <a href="index.html" class="button">🚀 View Portfolio</a>
+        
+        <h2>🎨 Available Animations:</h2>
+        <ul>
+            <li>✨ <strong>Blink:</strong> Opacity changes (default)</li>
+            <li>🌊 <strong>Wave:</strong> Flowing wave patterns</li>
+            <li>🌬️ <strong>Wind:</strong> Swaying movements</li>
+        </ul>
+
+        <h2>🔧 Testing Instructions:</h2>
+        <ol>
+            <li><strong>Desktop:</strong> Resize browser window to test breakpoints</li>
+            <li><strong>Mobile:</strong> Use browser dev tools device simulation</li>
+            <li><strong>Real Device:</strong> Test on actual phones/tablets</li>
+            <li><strong>Edge Cases:</strong> Test very wide and very narrow screens</li>
+        </ol>
+
+        <div style="margin-top: 30px; padding: 15px; background: #2d3436; border-radius: 5px;">
+            <h3>🎨 Current Settings:</h3>
+            <p><strong>Canvas Text:</strong> <span id="canvasFont"></span></p>
+            <p><strong>Name Font:</strong> <span id="nameFont"></span></p>
+            <p><strong>Social Font:</strong> <span id="socialFont"></span></p>
+            <p><strong>Canvas Padding:</strong> <span id="canvasPadding"></span></p>
+        </div>
+    </div>
+
+    <script>
+        function updateDeviceInfo() {
+            const width = window.innerWidth;
+            document.getElementById('screenWidth').textContent = screen.width;
+            document.getElementById('viewportWidth').textContent = width;
+            document.getElementById('deviceRatio').textContent = window.devicePixelRatio;
+            
+            let breakpoint = 'Desktop';
+            let canvasFont = '11px';
+            let nameFont = '20px';
+            let socialFont = '10px';
+            let canvasPadding = '0px';
+            
+            if (width <= 360) {
+                breakpoint = 'Very Small Mobile';
+                canvasFont = '10px';
+                nameFont = '12px';
+                socialFont = '11px';
+                canvasPadding = '16px';
+            } else if (width <= 480) {
+                breakpoint = 'Small Mobile';
+                canvasFont = '10px';
+                nameFont = '14px';
+                socialFont = '12px';
+                canvasPadding = '24px';
+            } else if (width <= 768) {
+                breakpoint = 'Mobile/Tablet';
+                canvasFont = '10px';
+                nameFont = '14px';
+                socialFont = '12px';
+                canvasPadding = '32px';
+            }
+            
+            document.getElementById('breakpoint').textContent = breakpoint;
+            document.getElementById('canvasFont').textContent = canvasFont;
+            document.getElementById('nameFont').textContent = nameFont;
+            document.getElementById('socialFont').textContent = socialFont;
+            document.getElementById('canvasPadding').textContent = canvasPadding;
+        }
+        
+        updateDeviceInfo();
+        window.addEventListener('resize', updateDeviceInfo);
+    </script>
+</body>
+</html>

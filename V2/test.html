@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>V2 Portfolio Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #111;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+        .test-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #222;
+            padding: 30px;
+            border-radius: 10px;
+            border: 2px solid #333;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .success { background: #28a745; }
+        .error { background: #dc3545; }
+        .warning { background: #ffc107; color: #000; }
+        .test-btn {
+            background: #0066cc;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+            font-size: 16px;
+        }
+        .test-btn:hover {
+            background: #0052a3;
+        }
+        iframe {
+            width: 100%;
+            height: 400px;
+            border: 1px solid #444;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .info {
+            background: #333;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🧪 V2 Portfolio Test</h1>
+        <p>This page helps verify that your V2 portfolio is working correctly.</p>
+
+        <div id="test-results">
+            <div class="info">
+                <h3>📋 Test Checklist</h3>
+                <ul>
+                    <li><strong>Letters Display:</strong> Canvas should show animated letters</li>
+                    <li><strong>Canvas Width:</strong> Should be 80% of screen width (max 1200px on desktop)</li>
+                    <li><strong>Highlight Words:</strong> Should see PRODUCTDESIGNER, 10+YEARS, CRAFTFIRST</li>
+                    <li><strong>Animation Controls:</strong> Three buttons should work</li>
+                    <li><strong>Responsive:</strong> Should work on mobile and desktop</li>
+                    <li><strong>Console Logs:</strong> Check F12 for success messages</li>
+                </ul>
+            </div>
+
+            <button class="test-btn" onclick="openPortfolio()">🚀 Test V2 Portfolio</button>
+            <button class="test-btn" onclick="runAutoTest()">🔍 Auto Test</button>
+            <button class="test-btn" onclick="checkConsole()">📊 Check Console</button>
+
+            <div id="auto-test-results"></div>
+
+            <iframe id="portfolio-frame" style="display: none;" src="index.html"></iframe>
+        </div>
+
+        <div class="info">
+            <h3>🐛 Common Issues</h3>
+            <ul>
+                <li><strong>Black Canvas:</strong> Check if all 3 files are in same directory</li>
+                <li><strong>No Animation:</strong> Verify JavaScript is enabled</li>
+                <li><strong>Missing Words:</strong> Check console for word placement logs</li>
+                <li><strong>Mobile Issues:</strong> Test responsive design</li>
+            </ul>
+        </div>
+
+        <div class="info">
+            <h3>✅ Success Indicators</h3>
+            <p>When working properly, you should see in console:</p>
+            <pre style="background: #000; padding: 10px; border-radius: 3px;">
+🚀 V2 PortfolioAnimation: Starting initialization...
+📏 Canvas size: [width]px × [height]px
+📊 Grid: [rows] rows × [cols] cols
+🎯 Placing highlight words: [words]
+✨ Generated [number] letters successfully
+✅ V2 Portfolio animation initialized successfully!
+            </pre>
+        </div>
+    </div>
+
+    <script>
+        function openPortfolio() {
+            const frame = document.getElementById('portfolio-frame');
+            frame.style.display = 'block';
+            frame.src = 'index.html?test=' + Date.now(); // Force reload
+            
+            setTimeout(() => {
+                checkFrameStatus();
+            }, 2000);
+        }
+
+        function checkFrameStatus() {
+            const frame = document.getElementById('portfolio-frame');
+            const resultsDiv = document.getElementById('auto-test-results');
+            
+            try {
+                const frameDoc = frame.contentDocument || frame.contentWindow.document;
+                const canvas = frameDoc.getElementById('canvas');
+                const letters = frameDoc.querySelectorAll('.letter');
+                
+                let results = '<h3>🔍 Auto Test Results:</h3>';
+                
+                if (canvas) {
+                    results += '<div class="status success">✅ Canvas element found</div>';
+                } else {
+                    results += '<div class="status error">❌ Canvas element not found</div>';
+                }
+                
+                if (letters.length > 0) {
+                    results += `<div class="status success">✅ Letters generated (${letters.length} letters)</div>`;
+                } else {
+                    results += '<div class="status error">❌ No letters generated</div>';
+                }
+                
+                // Check for highlight words
+                const highlightCount = Array.from(letters).filter(letter => 
+                    letter.style.fontWeight === '500'
+                ).length;
+                
+                if (highlightCount > 0) {
+                    results += `<div class="status success">✅ Highlight letters found (${highlightCount})</div>`;
+                } else {
+                    results += '<div class="status warning">⚠️ No highlight letters detected</div>';
+                }
+                
+                // Check animation controls
+                const controls = frameDoc.querySelectorAll('.control-icon');
+                if (controls.length >= 3) {
+                    results += `<div class="status success">✅ Animation controls found (${controls.length})</div>`;
+                } else {
+                    results += '<div class="status error">❌ Animation controls missing</div>';
+                }
+                
+                resultsDiv.innerHTML = results;
+                
+            } catch (error) {
+                resultsDiv.innerHTML = `
+                    <h3>🔍 Auto Test Results:</h3>
+                    <div class="status error">❌ Cannot access iframe content (cross-origin restriction)</div>
+                    <div class="status warning">⚠️ Manual testing required - check the portfolio above</div>
+                `;
+            }
+        }
+
+        function runAutoTest() {
+            const resultsDiv = document.getElementById('auto-test-results');
+            resultsDiv.innerHTML = '<div class="status warning">🔄 Running tests... This may take a few seconds.</div>';
+            openPortfolio();
+        }
+
+        function checkConsole() {
+            alert('Open Browser Developer Tools (F12) and look for V2 console messages starting with 🚀, 📏, 📊, etc.');
+        }
+
+        // Auto-run basic checks
+        document.addEventListener('DOMContentLoaded', () => {
+            const resultsDiv = document.getElementById('auto-test-results');
+            resultsDiv.innerHTML = `
+                <div class="info">
+                    <h3>🎯 Quick Check</h3>
+                    <p><strong>Current Location:</strong> ${window.location.href}</p>
+                    <p><strong>Expected Files:</strong> index.html, portfolio.css, portfolio.js</p>
+                    <p><strong>Next Steps:</strong> Click "Test V2 Portfolio" to verify functionality</p>
+                </div>
+            `;
+        });
+    </script>
+</body>
+</html>

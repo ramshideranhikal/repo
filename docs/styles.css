@@ -1,0 +1,416 @@
+/* Reset and base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Geist', sans-serif;
+    overflow: hidden;
+    background: #000000;
+    color: #ffffff;
+    /* Ensure minimum safe area for mobile devices */
+    min-width: 320px;
+}
+
+/* Portfolio container */
+.portfolio-container {
+    background: #000000;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    /* Safe area for devices with notches/rounded corners */
+    padding-left: env(safe-area-inset-left, 0);
+    padding-right: env(safe-area-inset-right, 0);
+    padding-top: env(safe-area-inset-top, 0);
+    padding-bottom: env(safe-area-inset-bottom, 0);
+    /* Add top margin for better visual spacing on desktop */
+    margin-top: 20px;
+}
+
+/* Canvas area - takes up most of the screen */
+.canvas-area {
+    flex: 1;
+    position: relative;
+    min-height: 0;
+    /* Ensure proper padding on all mobile devices */
+    padding: 32px;
+}
+
+.canvas-center {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Mobile devices - maintain 32px padding */
+@media (max-width: 768px) {
+    .canvas-area {
+        padding: 32px;
+    }
+    .canvas-center {
+        inset: 0;
+    }
+}
+
+/* Small mobile devices - reduce padding slightly */
+@media (max-width: 480px) {
+    .canvas-area {
+        padding: 24px;
+    }
+    
+    .portfolio-container {
+        margin-top: 15px; /* Smaller margin for mobile */
+    }
+}
+
+/* Very small screens */
+@media (max-width: 360px) {
+    .canvas-area {
+        padding: 16px;
+    }
+    
+    .portfolio-container {
+        margin-top: 10px; /* Reduced margin for very small screens */
+    }
+}
+
+/* Desktop - remove padding from canvas area but add top margin */
+@media (min-width: 769px) {
+    .canvas-area {
+        padding: 0;
+        /* Add 40px top margin for desktop */
+        padding-top: 40px;
+    }
+    .canvas-center {
+        inset: 0;
+    }
+}
+
+.animated-canvas {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    max-width: 1280px;
+    max-height: 795px;
+    overflow: hidden;
+}
+
+/* Fixed mobile canvas dimensions for consistent word placement */
+@media (max-width: 768px) {
+    .animated-canvas {
+        min-width: 300px;
+        min-height: 400px;
+    }
+}
+
+@media (max-width: 480px) {
+    .animated-canvas {
+        min-width: 280px;
+        min-height: 350px;
+    }
+}
+
+@media (max-width: 360px) {
+    .animated-canvas {
+        min-width: 260px;
+        min-height: 320px;
+    }
+}
+
+/* Animated letters */
+.letter {
+    position: absolute;
+    font-family: 'Geist Mono', monospace;
+    font-weight: 400;
+    user-select: none;
+    color: #ffffff;
+    line-height: 0;
+    letter-spacing: 6.6px;
+}
+
+/* Responsive font sizes for canvas text */
+@media (min-width: 769px) {
+    .letter {
+        font-size: 11px;
+    }
+}
+
+@media (max-width: 768px) and (min-width: 481px) {
+    .letter {
+        font-size: 10px;
+        letter-spacing: 6.0px;
+    }
+}
+
+@media (max-width: 480px) {
+    .letter {
+        font-size: 9px;
+        letter-spacing: 5.5px;
+    }
+}
+
+/* Bottom section - fixed height */
+.bottom-section {
+    position: relative;
+    height: 120px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Default mobile padding */
+    padding: 0 32px;
+}
+
+/* Ensure proper mobile spacing */
+@media (max-width: 768px) {
+    .bottom-section {
+        padding: 0 32px;
+    }
+}
+
+/* Small mobile adjustments */
+@media (max-width: 480px) {
+    .bottom-section {
+        padding: 20px 24px;
+    }
+}
+
+/* Very small screens */
+@media (max-width: 360px) {
+    .bottom-section {
+        padding: 16px;
+    }
+}
+
+/* Desktop - no horizontal padding but maintain vertical space */
+@media (min-width: 769px) {
+    .bottom-section {
+        padding: 0;
+    }
+}
+
+.bottom-content {
+    width: 100%;
+    max-width: 1280px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    /* Ensure content never touches edges on any device */
+    margin: 0 auto;
+    position: relative;
+}
+
+/* Name styling */
+.name {
+    font-family: 'Geist', sans-serif;
+    font-weight: 800;
+    line-height: normal;
+    opacity: 0.2;
+    color: #ffffff;
+    white-space: nowrap;
+}
+
+/* Responsive font sizes for name - increased by 2px */
+@media (max-width: 768px) {
+    .name {
+        font-size: 16px; /* Increased from 14px to 16px */
+    }
+}
+
+@media (min-width: 769px) {
+    .name {
+        font-size: 22px; /* Increased from 20px to 22px */
+    }
+}
+
+/* Animation controls */
+.animation-controls {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.control-icon {
+    position: relative;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    opacity: 0.3;
+}
+
+.control-icon:hover {
+    opacity: 0.6;
+    transform: scale(1.1);
+}
+
+.control-icon.active {
+    opacity: 1;
+}
+
+.control-icon svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+/* Social links */
+.social-links {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    font-family: 'Geist Mono', monospace;
+    font-weight: 400;
+    color: #ffffff;
+    opacity: 0.3;
+}
+
+@media (min-width: 769px) {
+    .social-links {
+        gap: 32px;
+    }
+}
+
+.social-link {
+    color: inherit;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    line-height: 15px;
+    white-space: nowrap;
+    transform: scale(1);
+}
+
+.social-link:hover {
+    opacity: 0.8;
+    transform: scale(1.05);
+}
+
+/* Responsive font sizes for social links */
+@media (max-width: 768px) {
+    .social-link {
+        font-size: 12px;
+    }
+}
+
+@media (min-width: 769px) {
+    .social-link {
+        font-size: 10px;
+    }
+}
+
+/* Desktop layout */
+@media (min-width: 769px) {
+    .bottom-content {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .top-row {
+        display: contents; /* This makes the children behave as if top-row doesn't exist */
+    }
+}
+
+/* Mobile layout - name and icons in first row, social links in second row */
+@media (max-width: 768px) {
+    .bottom-content {
+        flex-direction: column;
+        gap: 16px;
+        align-items: center;
+        text-align: center;
+        /* Add extra padding to prevent edge touching */
+        padding: 0 8px;
+    }
+    
+    /* First row: name and animation controls */
+    .top-row {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
+        width: 100%;
+        flex-wrap: wrap;
+    }
+    
+    .name {
+        flex-shrink: 0;
+    }
+    
+    .animation-controls {
+        gap: 12px;
+        flex-shrink: 0;
+    }
+    
+    /* Second row: social links */
+    .social-links {
+        gap: 16px;
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .bottom-section {
+        height: auto;
+        min-height: 120px;
+        padding: 20px 32px;
+    }
+}
+
+/* Very small screens */
+@media (max-width: 360px) {
+    .bottom-content {
+        padding: 0 4px;
+        gap: 8px;
+    }
+    
+    .top-row {
+        gap: 12px;
+    }
+    
+    .social-links {
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+    
+    .animation-controls {
+        gap: 8px;
+    }
+    
+    .control-icon {
+        width: 20px;
+        height: 20px;
+    }
+    
+    .name {
+        font-size: 14px; /* Keep the increased size */
+    }
+    
+    .social-link {
+        font-size: 11px;
+    }
+}
+
+/* Extra safety for very narrow screens */
+@media (max-width: 320px) {
+    .portfolio-container {
+        min-width: 320px;
+    }
+    
+    .bottom-content {
+        padding: 0 2px;
+        min-width: 0;
+    }
+    
+    .name,
+    .social-link {
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}

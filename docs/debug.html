@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug - Portfolio Animation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #111;
+            color: #fff;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .debug-section {
+            background: #222;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid #0066cc;
+        }
+        .status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        .success { background: #28a745; }
+        .error { background: #dc3545; }
+        .warning { background: #ffc107; color: #000; }
+        pre {
+            background: #333;
+            padding: 10px;
+            border-radius: 3px;
+            overflow-x: auto;
+        }
+        button {
+            background: #0066cc;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #0052a3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Portfolio Animation Debug Tool</h1>
+    
+    <div class="debug-section">
+        <h2>Environment Info</h2>
+        <div id="env-info">
+            <p><strong>URL:</strong> <span id="url"></span></p>
+            <p><strong>User Agent:</strong> <span id="user-agent"></span></p>
+            <p><strong>Screen Size:</strong> <span id="screen-size"></span></p>
+            <p><strong>Viewport Size:</strong> <span id="viewport-size"></span></p>
+        </div>
+    </div>
+
+    <div class="debug-section">
+        <h2>File Loading Status</h2>
+        <div id="file-status">
+            <p>CSS (styles.css): <span id="css-status" class="status">Checking...</span></p>
+            <p>JavaScript (script.js): <span id="js-status" class="status">Checking...</span></p>
+            <p>Canvas Element: <span id="canvas-status" class="status">Checking...</span></p>
+        </div>
+    </div>
+
+    <div class="debug-section">
+        <h2>Animation Test</h2>
+        <button onclick="testAnimation()">Test Animation</button>
+        <button onclick="testMobile()">Test Mobile Layout</button>
+        <div id="animation-test"></div>
+    </div>
+
+    <div class="debug-section">
+        <h2>Console Logs</h2>
+        <pre id="console-logs">Console logs will appear here...</pre>
+        <button onclick="clearLogs()">Clear Logs</button>
+    </div>
+
+    <div class="debug-section">
+        <h2>Quick Links</h2>
+        <p><a href="index.html" style="color: #66b3ff;">Main Portfolio</a></p>
+        <p><a href="../mobile-test.html" style="color: #66b3ff;">Mobile Test (Root)</a></p>
+        <p><a href="../index.html" style="color: #66b3ff;">Root Index</a></p>
+    </div>
+
+    <script>
+        // Capture console logs
+        const originalLog = console.log;
+        const originalError = console.error;
+        const originalWarn = console.warn;
+        const logs = [];
+
+        function captureLog(type, args) {
+            const timestamp = new Date().toISOString().split('T')[1].split('.')[0];
+            const message = Array.from(args).join(' ');
+            logs.push(`[${timestamp}] ${type.toUpperCase()}: ${message}`);
+            updateConsoleLogs();
+        }
+
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            captureLog('log', args);
+        };
+
+        console.error = function(...args) {
+            originalError.apply(console, args);
+            captureLog('error', args);
+        };
+
+        console.warn = function(...args) {
+            originalWarn.apply(console, args);
+            captureLog('warn', args);
+        };
+
+        function updateConsoleLogs() {
+            document.getElementById('console-logs').textContent = logs.slice(-20).join('\n');
+        }
+
+        function clearLogs() {
+            logs.length = 0;
+            updateConsoleLogs();
+        }
+
+        // Environment info
+        function updateEnvInfo() {
+            document.getElementById('url').textContent = window.location.href;
+            document.getElementById('user-agent').textContent = navigator.userAgent;
+            document.getElementById('screen-size').textContent = `${screen.width}x${screen.height}`;
+            document.getElementById('viewport-size').textContent = `${window.innerWidth}x${window.innerHeight}`;
+        }
+
+        // File status check
+        function checkFileStatus() {
+            // Check CSS
+            const cssLoaded = document.styleSheets.length > 0;
+            document.getElementById('css-status').textContent = cssLoaded ? 'Loaded' : 'Not Found';
+            document.getElementById('css-status').className = 'status ' + (cssLoaded ? 'success' : 'error');
+
+            // Check if script.js is loaded by looking for our classes
+            const scriptLoaded = typeof PortfolioAnimation !== 'undefined';
+            document.getElementById('js-status').textContent = scriptLoaded ? 'Loaded' : 'Not Found';
+            document.getElementById('js-status').className = 'status ' + (scriptLoaded ? 'success' : 'error');
+
+            // Check canvas element
+            const canvasExists = document.getElementById('canvas') !== null;
+            document.getElementById('canvas-status').textContent = canvasExists ? 'Found' : 'Not Found';
+            document.getElementById('canvas-status').className = 'status ' + (canvasExists ? 'success' : 'error');
+        }
+
+        function testAnimation() {
+            const testResult = document.getElementById('animation-test');
+            testResult.innerHTML = '<p>Testing animation...</p>';
+            
+            try {
+                if (typeof PortfolioAnimation === 'undefined') {
+                    testResult.innerHTML = '<p class="error">❌ PortfolioAnimation class not found. Script.js may not be loaded.</p>';
+                    return;
+                }
+
+                // Create a temporary canvas for testing
+                const tempCanvas = document.createElement('div');
+                tempCanvas.id = 'temp-canvas';
+                tempCanvas.style.width = '400px';
+                tempCanvas.style.height = '300px';
+                tempCanvas.style.position = 'relative';
+                tempCanvas.style.background = '#000';
+                tempCanvas.style.border = '1px solid #333';
+                document.body.appendChild(tempCanvas);
+
+                // Test animation initialization
+                const originalCanvas = document.getElementById('canvas');
+                const testCanvas = document.getElementById('temp-canvas');
+                
+                // Temporarily replace canvas
+                if (originalCanvas) {
+                    originalCanvas.id = 'canvas-backup';
+                }
+                testCanvas.id = 'canvas';
+
+                try {
+                    const animation = new PortfolioAnimation();
+                    testResult.innerHTML = '<p class="success">✅ Animation initialized successfully!</p>';
+                    
+                    // Restore original canvas
+                    testCanvas.id = 'temp-canvas';
+                    if (originalCanvas) {
+                        originalCanvas.id = 'canvas';
+                    }
+                    
+                    // Remove temp canvas after 3 seconds
+                    setTimeout(() => {
+                        if (tempCanvas.parentNode) {
+                            tempCanvas.parentNode.removeChild(tempCanvas);
+                        }
+                    }, 3000);
+                    
+                } catch (error) {
+                    testResult.innerHTML = `<p class="error">❌ Animation failed: ${error.message}</p>`;
+                    console.error('Animation test error:', error);
+                }
+                
+            } catch (error) {
+                testResult.innerHTML = `<p class="error">❌ Test failed: ${error.message}</p>`;
+                console.error('Test error:', error);
+            }
+        }
+
+        function testMobile() {
+            const testResult = document.getElementById('animation-test');
+            const isMobile = window.innerWidth <= 768;
+            const isSmall = window.innerWidth <= 480;
+            
+            testResult.innerHTML = `
+                <div>
+                    <h3>Mobile Detection Results:</h3>
+                    <p><strong>Screen Width:</strong> ${window.innerWidth}px</p>
+                    <p><strong>Is Mobile:</strong> ${isMobile ? 'Yes' : 'No'}</p>
+                    <p><strong>Is Small Mobile:</strong> ${isSmall ? 'Yes' : 'No'}</p>
+                    <p><strong>Expected Algorithm:</strong> ${isMobile ? 'Mobile-specific' : 'Desktop'}</p>
+                </div>
+            `;
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            updateEnvInfo();
+            checkFileStatus();
+            
+            // Update viewport size on resize
+            window.addEventListener('resize', () => {
+                updateEnvInfo();
+            });
+        });
+
+        // Try to load script.js dynamically to test
+        const script = document.createElement('script');
+        script.src = 'script.js';
+        script.onload = () => {
+            console.log('Script.js loaded successfully');
+            setTimeout(checkFileStatus, 100);
+        };
+        script.onerror = () => {
+            console.error('Failed to load script.js');
+            setTimeout(checkFileStatus, 100);
+        };
+        document.head.appendChild(script);
+    </script>
+</body>
+</html>
