@@ -43,7 +43,6 @@ body {
     max-height: 600px;
     background: #000000;
     overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.1); /* Debug border */
 }
 
 /* Letter Styling */
@@ -160,13 +159,13 @@ body {
 
     .bottom-content {
         flex-direction: column;
-        gap: 16px;
+        gap: 20px;
         text-align: center;
         max-width: 80vw;
     }
 
     .name {
-        font-size: 16px;
+        font-size: 20px;
     }
 
     .social-links {
@@ -217,21 +216,23 @@ body {
     }
 
     .animation-controls {
-        gap: 12px;
+        gap: 20px;
     }
 
     .name {
-        font-size: 14px;
+        font-size: 20px;
     }
 
     .social-links {
-        gap: 12px;
+        justify-content: space-between !important;
+        width: 100%;
     }
 
     .top-row {
         gap: 16px;
         flex-wrap: wrap;
-        justify-content: center;
+        justify-content: space-between;
+        width: 100%;
     }
 }
 
@@ -259,7 +260,7 @@ body {
     }
 
     .animation-controls {
-        gap: 8px;
+        gap: 20px;
     }
 }
 
